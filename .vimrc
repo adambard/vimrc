@@ -26,6 +26,8 @@ Bundle 'vim-scripts/snipMate'
 Bundle 'tpope/vim-foreplay.git'
 Bundle 'tpope/vim-classpath.git'
 Bundle 'guns/vim-clojure-static'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'rosstimson/scala-vim-support'
 
 
 
