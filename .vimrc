@@ -6,7 +6,7 @@ set nocompatible " explicitly get out of vi-compatible mode
 
 filetype off
 
-set rtp+=~/vimfiles/bundle\vundle/
+set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
@@ -18,10 +18,14 @@ Bundle 'scrooloose/syntastic'
 Bundle 'kien/ctrlp.vim'
 Bundle 'vim-scripts/slimv.vim'
 Bundle 'vim-scripts/matlab.vim'
-Bundle 'vim-scripts/VimClojure'
 Bundle 'kchmck/vim-coffee-script.git'
 Bundle 'sophacles/vim-bundle-sparkup'
 Bundle 'shougo/neocomplcache'
+Bundle 'juvenn/mustache.vim'
+Bundle 'vim-scripts/snipMate'
+Bundle 'tpope/vim-foreplay.git'
+Bundle 'tpope/vim-classpath.git'
+Bundle 'guns/vim-clojure-static'
 
 
 
@@ -38,8 +42,11 @@ set fencs=ucs-bom,utf-8,ucs-2le,defaul,latin1
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 nmap <silent> <leader>p gqap
+nmap <silent> <leader>' r`
 nmap <silent> <leader>cl mggg=G:%s/[ \t]*$//g`gk<CR>
 nmap <silent> <leader>ca gg^yG<CR>
+nnoremap / /\v
+vnoremap / /\v
 
 " Omnicomplete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -64,7 +71,7 @@ set backspace=indent,eol,start " make backspace a more flexible
 set nobackup " don't make backup files
 "set backupdir='C:\Documents and Settings\abard\vimfiles\backup' " where to put backup files
 set clipboard+=unnamed " share windows clipboard
-set directory=~/vimfiles/tmp " directory to place swap files in
+set directory=~/.vim/tmp " directory to place swap files in
 set fileformats=unix,dos " support all three, in this order
 set hidden " you can change buffers without saving
 " (XXX: #VIM/tpope warns the line below could break things)
@@ -170,24 +177,8 @@ noremap <space> <C-f>
 au BufRead,BufNewFile *.rb,*.rhtml set shiftwidth=2
 au BufRead,BufNewFile *.rb,*.rhtml set softtabstop=2
 " }
-" Notes {
-" I consider .notes files special, and handle them differently, I
-" should probably put this in another file
-au BufRead,BufNewFile *.notes set foldlevel=2
-au BufRead,BufNewFile *.notes set foldmethod=indent
-au BufRead,BufNewFile *.notes set foldtext=foldtext()
-au BufRead,BufNewFile *.notes set listchars=tab:\ \
-au BufRead,BufNewFile *.notes set noexpandtab
-au BufRead,BufNewFile *.notes set shiftwidth=8
-au BufRead,BufNewFile *.notes set softtabstop=8
-au BufRead,BufNewFile *.notes set tabstop=8
-au BufRead,BufNewFile *.notes set syntax=notes
-au BufRead,BufNewFile *.notes set nocursorcolumn
-au BufRead,BufNewFile *.notes set nocursorline
-au BufRead,BufNewFile *.notes set guifont=Consolas:h12
-au BufRead,BufNewFile *.notes set spell
 " }
-au BufNewFile,BufRead *.ahk setf ahk
+
 " }
 
 " Vimclojure settings{
@@ -202,7 +193,7 @@ au BufNewFile,BufRead *.ahk setf ahk
 if has("gui_running")
     " Basics {
     colorscheme slate " my color scheme (only works in GUI)
-    set guifont=Consolas:h10 " My favorite font
+    "set guifont=Consolas:h10 " My favorite font
     set guioptions=ce
     "              ||
     "              |+-- use simple dialogs rather than pop-ups
@@ -213,9 +204,9 @@ if has("gui_running")
     map <silent> <F8> :Explore<CR>
     map <silent> <S-F8> :Sexplore<CR>
     " Font Switching Binds {
-    map <F9> <ESC>:set guifont=Consolas:h10<CR>
-    map <F10> <ESC>:set guifont=Consolas:h12<CR>
-    map <F11> <ESC>:set guifont=Consolas:h16<CR>
+    map <F9> <ESC>:set guifont=Monospace\ 10<CR>
+    map <F10> <ESC>:set guifont=Monospace\ 12<CR>
+    map <F11> <ESC>:set guifont=Monospace\ 16<CR>
     " }
 endif
 " }
