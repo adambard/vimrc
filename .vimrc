@@ -9,26 +9,53 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'gmarik/vundle'
+au!
 
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-surround'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'scrooloose/syntastic'
-Bundle 'kien/ctrlp.vim'
-Bundle 'vim-scripts/slimv.vim'
-Bundle 'vim-scripts/matlab.vim'
-Bundle 'kchmck/vim-coffee-script.git'
-Bundle 'sophacles/vim-bundle-sparkup'
-Bundle 'shougo/neocomplcache'
-Bundle 'juvenn/mustache.vim'
-Bundle 'vim-scripts/snipMate'
-Bundle 'tpope/vim-foreplay.git'
-Bundle 'tpope/vim-classpath.git'
-Bundle 'guns/vim-clojure-static'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'rosstimson/scala-vim-support'
+Plugin 'gmarik/vundle'
 
+Plugin 'Shougo/vimproc'
+
+" Git Helpers
+Plugin 'tpope/vim-fugitive'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim.git'
+Plugin 'airblade/vim-gitgutter.git'
+
+"Completion Utils
+Plugin 'tpope/vim-surround'
+Plugin 'shougo/neocomplcache'
+Plugin 'sophacles/vim-bundle-sparkup'
+
+" Syntax highlighting plugsns
+Plugin 'scrooloose/syntastic'
+Plugin 'nvie/vim-flake8.git'
+
+"Language support
+Plugin 'vim-scripts/matlab.vim'
+Plugin 'kchmck/vim-coffee-script.git'
+Plugin 'juvenn/mustache.vim'
+Plugin 'rosstimson/scala-vim-support'
+
+
+" Clojure support
+Plugin 'tpope/vim-fireplace.git'
+Plugin 'tpope/vim-classpath.git'
+Plugin 'guns/vim-clojure-static'
+Plugin 'kovisoft/paredit'
+
+" Respect .editorconfig files
+Plugin 'editorconfig/editorconfig-vim'
+
+" Color Schemes
+Plugin 'flazz/vim-colorschemes'
+Plugin 'altercation/vim-colors-solarized'
+
+" Docs
+Plugin 'rizzatti/dash.vim'
+
+" Typescript
+Plugin 'leafgarland/typescript-vim'
+Plugin 'Quramy/tsuquyomi'
 
 
 
@@ -37,21 +64,49 @@ Bundle 'rosstimson/scala-vim-support'
 let mapleader = ","
 
 let g:clj_paren_rainbow=1
-let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_at_startup = 0
+
+let g:tsuquyomi_disable_quickfix = 1
+let g:syntastic_typescript_checkers = ['tsuquyomi'] " You shouldn't use 'tsc' checker.
+
 
 set fencs=ucs-bom,utf-8,ucs-2le,defaul,latin1
 
+" Leader commands {
+
+" ,ev: Edit vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
+" ,sv: Source vimrc
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
-nmap <silent> <leader>p gqap
-nmap <silent> <leader>' r`
+", st: toggle syntastic and gitgutter (for performance)
+nmap <silent> <leader>st :SyntasticToggleMode<CR>:ToggleGitGutter<CR>
+
 nmap <silent> <leader>cl mggg=G:%s/[ \t]*$//g`gk<CR>
 nmap <silent> <leader>ca gg^yG<CR>
+
+" ,f: Toggle NERDTree
+" ,d: Toggle NERDTree in cwd
+nmap <silent> <leader>f :NERDTreeToggle<CR>
+nmap <silent> <leader>d :NERDTree<CR>
+
+" ,T: Set current CommandT directory to current directory
+" ,t: Search for a file in current CommandT directory
+let g:cmdt_root=getcwd()
+nmap <silent> <leader>T :let g:cmdt_root=getcwd()<CR>
+nmap <silent> <leader>t :exe 'CommandT' g:cmdt_root<CR>
+
+nmap <silent> <leader>d :Dash<CR>
+
+" }
+
+" Make search advanced by default
 nnoremap / /\v
 vnoremap / /\v
 
 " Omnicomplete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+let g:jedi#auto_initialization = 0
+let g:jedi#popup_on_dot = 0
+autocmd  FileType python let b:did_ftplugin = 1
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
@@ -72,7 +127,9 @@ set autochdir " always switch to the current file directory
 set backspace=indent,eol,start " make backspace a more flexible
 set nobackup " don't make backup files
 "set backupdir='C:\Documents and Settings\abard\vimfiles\backup' " where to put backup files
-set clipboard+=unnamed " share windows clipboard
+if $TMUX == ''
+    set clipboard+=unnamed
+endif
 set directory=~/.vim/tmp " directory to place swap files in
 set fileformats=unix,dos " support all three, in this order
 set hidden " you can change buffers without saving
@@ -105,7 +162,7 @@ set linespace=0 " don't insert any extra pixel lines
 " betweens rows
 set list " we do what to show tabs, to ensure we get them
 " out of my files
-set listchars=tab:>-,trail:-,extends:#,nbsp:- " show tabs and trailing
+set listchars=tab:>·,trail:·,extends:#,nbsp:· " show tabs and trailing
 set matchtime=5 " how many tenths of a second to blink
 " matching brackets for
 set nostartofline " leave my cursor where it was
@@ -179,6 +236,17 @@ noremap <space> <C-f>
 au BufRead,BufNewFile *.rb,*.rhtml set shiftwidth=2
 au BufRead,BufNewFile *.rb,*.rhtml set softtabstop=2
 " }
+
+" JS/Typescript {
+" 2 spaces, again
+au BufRead,BufNewFile *.js,*.ts,*.tsx set shiftwidth=2
+au BufRead,BufNewFile *.js,*.ts,*.tsx set softtabstop=2
+" }
+
+" Python {
+" PEP #whatever demands 4 spaces 
+au BufRead,BufNewFile *.py set shiftwidth=4
+au BufRead,BufNewFile *.py set softtabstop=4
 " }
 
 " }
@@ -189,6 +257,10 @@ au BufRead,BufNewFile *.rb,*.rhtml set softtabstop=2
     let vimclojure#WantNailgun   = 1
     let vimclojure#NailgunClient ="ng"
 
+" }
+
+" Syntastic settings {
+    let g:syntastic_python_checker_args='--ignore=E501'
 " }
 
 " GUI Settings {
